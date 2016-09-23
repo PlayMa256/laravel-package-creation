@@ -1,0 +1,10 @@
+{
+    "name": "playma256/testepackage",
+    "authors": [
+        {
+            "name": "PlayMa256",
+            "email": "matheus.g.silva@hotmail.com"
+        }
+    ],
+    "require": {}
+}
