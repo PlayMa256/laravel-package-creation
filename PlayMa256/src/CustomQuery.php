@@ -11,6 +11,12 @@ class CustomQuery extends Builder{
         parent::__construct($query);
     }
 
+    public function procurarPeloId($id){
+        return $this->query->find($id);
+    }
+    public function retornaAtributos(){
+        return $this->model->getAttributes();
+    }
     public function __call($name, $arguments) {
         if (isset($this->methods[$name])) {
             $closure = $this->methods[$name];
@@ -25,7 +31,7 @@ class CustomQuery extends Builder{
     public function createCustomQueries(){
         $modelAttributes = $this->model->getAttributes();
         foreach($modelAttributes as $attribute){
-            $this->registerMethod($attribute, function($value) use (&$attribute){
+            $this->registerMethod("findBy".ucfirst($attribute), function($value) use (&$attribute){
                return $this->query->where($attribute, '=', $value);
             });
         }
