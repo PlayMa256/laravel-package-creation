@@ -1,8 +1,9 @@
 <?php
 namespace PlayMa256\CustomQuery;
 use PlayMa256\CustomQuery\CustomQuery;
+use Illuminate\Database\Eloquent\Model;
 trait CustomQueryTrait {
     public function newEloquentBuilder($query){
-        return new CustomQuery($query);
+        return new CustomQuery($query, $this->getTable());
     }
 }
