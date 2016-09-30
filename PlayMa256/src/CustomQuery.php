@@ -2,6 +2,8 @@
 namespace PlayMa256\CustomQuery;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+
 class CustomQuery extends Builder{
 
     protected $methods = [];
@@ -9,14 +11,13 @@ class CustomQuery extends Builder{
     public function __construct(QueryBuilder $query)
     {
         parent::__construct($query);
+        createCustomQueries();
     }
 
     public function procurarPeloId($id){
         return $this->query->find($id);
     }
-    public function retornaAtributos(){
-        return $this->model->getAttributes();
-    }
+
     public function __call($name, $arguments) {
         if (isset($this->methods[$name])) {
             $closure = $this->methods[$name];
@@ -29,7 +30,7 @@ class CustomQuery extends Builder{
     }
 
     public function createCustomQueries(){
-        $modelAttributes = $this->model->getAttributes();
+        $modelAttributes = DB::getSchemaBuilder()->getColumnListing($this->model->getTable());
         foreach($modelAttributes as $attribute){
             $this->registerMethod("findBy".ucfirst($attribute), function($value) use (&$attribute){
                return $this->query->where($attribute, '=', $value);
